@@ -1,8 +1,9 @@
 import classes
 import funcoes
+import menu
 def cadastrar(lista_veiculos):
    while True:
-      tipo = int(input('Qual tipo de veículo deseja cadastrar: \n 1 - Carro\n 2 - Moto\n 3 - Caminhão\n 4 - Sair'))
+      tipo = int(input('Qual tipo de veículo deseja cadastrar: \n 1 - Carro\n 2 - Moto\n 3 - Caminhão\n 4 - Sair\n Opção: '))
       match tipo:
          case 1:
             placa, modelo, valor_diaria, disponivel = funcoes.info_veiculos()
@@ -22,4 +23,43 @@ def cadastrar(lista_veiculos):
          case _:
             print('Tipo inválido, tente novamente')
         
-      
+
+
+def buscar(lista_veiculos):
+   placa_buscada = input('Qual a placa do veículo desejado: ')
+   for veiculo in lista_veiculos:
+      if veiculo.placa == placa_buscada:
+        lista_um(veiculo)
+        return veiculo
+
+def lista_um(veiculo):
+   print(f"Placa: {veiculo.placa}\nModelo: {veiculo.modelo}\nValor Diário: {veiculo.valor_diaria}\nStatus: {'Disponível' if veiculo.disponivel else 'Indisponível'}")
+   print()
+   print('-=' * 12)
+   print()
+
+def listar(lista_veiculos):
+   for veiculo in lista_veiculos:
+     lista_um(veiculo)
+
+
+def atualizar(lista_veiculos):
+   while True:
+      veiculo = buscar(lista_veiculos)
+      opcao = menu.menu_atualizar()
+      match opcao:
+         case '1':
+            nova_placa = input('Nova placa: ')
+            veiculo.placa = nova_placa
+         case '2':
+            novo_modelo = input('Novo modelo: ')
+            veiculo.modelo = novo_modelo
+         case '3':
+            novo_valor = int(input('Novo valor diário: '))
+            veiculo.valor_diario = novo_valor
+         case '4':
+            print('Saindo do menu de atualizações...')
+            break
+         case _:
+            print('Opção inválida, tente novamente')
+

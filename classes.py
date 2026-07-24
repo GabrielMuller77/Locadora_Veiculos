@@ -51,6 +51,6 @@ class Caminhao(Veículo):
 
     def calcular_valor_total(self, dias):
         total = self.valor_diaria * dias
-        for dias in range(dias):
+        for d in range(dias):
             total += 50
         return total
