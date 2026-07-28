@@ -1,9 +1,10 @@
 import classes
 import funcoes
 import menu
+import validacoes
 def cadastrar(lista_veiculos):
    while True:
-      tipo = int(input('Qual tipo de veículo deseja cadastrar: \n 1 - Carro\n 2 - Moto\n 3 - Caminhão\n 4 - Sair\n Opção: '))
+      tipo = validacoes.validar_int('Qual tipo de veículo deseja cadastrar: \n 1 - Carro\n 2 - Moto\n 3 - Caminhão\n 4 - Sair\n Opção: ')
       match tipo:
          case 1:
             placa, modelo, valor_diaria, disponivel = funcoes.info_veiculos()
@@ -49,13 +50,13 @@ def atualizar(lista_veiculos):
       opcao = menu.menu_atualizar()
       match opcao:
          case '1':
-            nova_placa = input('Nova placa: ')
+            nova_placa = validacoes.validar_placa_duplicada('Nova placa: ')
             veiculo.placa = nova_placa
          case '2':
             novo_modelo = input('Novo modelo: ')
             veiculo.modelo = novo_modelo
          case '3':
-            novo_valor = int(input('Novo valor diário: '))
+            novo_valor = validacoes.validar_int('Novo valor diário: ')
             veiculo.valor_diario = novo_valor
          case '4':
             print('Saindo do menu de atualizações...')
@@ -78,7 +79,7 @@ def alugar(lista_veiculos):
    elif veiculo.disponivel is False:
       print('Veículo indisponível, já alugado.')
    else:
-      dias = int(input('Por quantos dias deseja alugar o veículo: '))
+      dias = validacoes.validar_int('Por quantos dias deseja alugar o veículo: ')
       aluguel = veiculo.alugar(dias)
       return aluguel
 
