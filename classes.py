@@ -15,7 +15,6 @@ class Veículo(ABC):
 
     def devolver(self):
         self.disponivel = True
-        return self.disponivel
 
 
     @abstractmethod

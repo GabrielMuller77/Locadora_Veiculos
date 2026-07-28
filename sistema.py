@@ -63,3 +63,33 @@ def atualizar(lista_veiculos):
          case _:
             print('Opção inválida, tente novamente')
 
+
+def excluir(lista_veiculos):
+   veiculo = buscar(lista_veiculos)
+   lista_veiculos.pop(veiculo)
+
+
+
+def alugar(lista_veiculos):
+   funcoes.buscar_disponiveis(lista_veiculos)
+   veiculo = buscar(lista_veiculos)
+   if veiculo is None:
+      print('Veículo não encontrado.')
+   elif veiculo.disponivel is False:
+      print('Veículo indisponível, já alugado.')
+   else:
+      dias = int(input('Por quantos dias deseja alugar o veículo: '))
+      aluguel = veiculo.alugar(dias)
+      return aluguel
+
+
+def devolver(lista_veiculos):
+   funcoes.buscar_indisponiveis(lista_veiculos)
+   veiculo = buscar(lista_veiculos)
+   if veiculo is None:
+      print('Veículo não encontrado')
+   elif veiculo.disponivel is True:
+      print('Veículo já disponível')
+   else:
+      veiculo.devolver()
+      print('Veículo devolvido com sucesso.')
