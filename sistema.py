@@ -50,7 +50,7 @@ def atualizar(lista_veiculos):
       opcao = menu.menu_atualizar()
       match opcao:
          case '1':
-            nova_placa = validacoes.validar_placa_duplicada('Nova placa: ')
+            nova_placa = validacoes.validar_placa('Nova placa: ')
             veiculo.placa = nova_placa
          case '2':
             novo_modelo = input('Novo modelo: ')

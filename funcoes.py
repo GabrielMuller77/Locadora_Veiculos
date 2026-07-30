@@ -1,6 +1,6 @@
 import validacoes
 def info_veiculos():
-    placa = validacoes.validar_placa_duplicada('Placa do veículo: ')
+    placa = validacoes.validar_placa('Placa do veículo: ')
     modelo = input('Modelo do veículo: ')
     valor_diaria = validacoes.validar_int('Valor da diária: ')
     disponivel = True
