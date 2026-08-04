@@ -1,7 +1,7 @@
-import classes
-import funcoes
-import menu
-import validacoes
+import Locadora_Veículos.programa.classes as classes
+import Locadora_Veículos.programa.funcoes as funcoes
+import Locadora_Veículos.programa.menu as menu
+import Locadora_Veículos.programa.validacoes as validacoes
 def cadastrar(lista_veiculos):
    while True:
       tipo = validacoes.validar_int('Qual tipo de veículo deseja cadastrar: \n 1 - Carro\n 2 - Moto\n 3 - Caminhão\n 4 - Sair\n Opção: ')

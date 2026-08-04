@@ -1,6 +1,6 @@
-import classes
-import sistema
-import menu
+import Locadora_Veículos.programa.classes as classes
+import Locadora_Veículos.programa.sistema as sistema
+import Locadora_Veículos.programa.menu as menu
 lista_veiculos = []
 def main():
 

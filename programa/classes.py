@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-import validacoes
+import Locadora_Veículos.programa.validacoes as validacoes
 class Veículo(ABC):
 
     def __init__(self, placa, modelo, valor_diaria=100, disponivel=True):

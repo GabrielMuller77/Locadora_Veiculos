@@ -1,4 +1,4 @@
-import validacoes
+import Locadora_Veículos.programa.validacoes as validacoes
 def info_veiculos():
     placa = validacoes.validar_placa('Placa do veículo: ')
     modelo = input('Modelo do veículo: ')
