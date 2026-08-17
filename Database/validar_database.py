@@ -3,6 +3,11 @@ def validar_usuario(usuario):
         print('Usuário não encontrado.')
     return usuario
 
+def validar_veiculo(veiculo):
+    if veiculo is None:
+        print("Veículo não encontrado.")
+    return veiculo
+
 
 def ler_int(msg):
     while True:

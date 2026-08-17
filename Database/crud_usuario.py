@@ -1,7 +1,7 @@
 from database import session
 from modelos import Usuario
 from validar_database import validar_usuario, ler_int
-from utilidades import perguntar_novamente
+from utilidades import perguntar_novamente, validar_sn
 
 
 def criar_usuario(usuario):
@@ -87,21 +87,25 @@ def excluir_usuario():
 
 def atualizar_cadastro():
     while True:
-        consultar_usuario()
+        listar_usuario()
         print('MENU DE ATUALIZAÇÕES DE USUÁRIO\n1 - ATUALIZAR TUDO\n 2 - ATUALIZAR NOME\n 3 - ATUALIZAR EMAIL\n4 - ATUALIZAR STATUS\n5 - SAIR')
         opcao = ler_int('Opção: ')
         match opcao:
             case 1:
                 novo_nome = input("Novo nome: ")
-                novo_email = input("Novo email")
+                novo_email = input("Novo email: ")
                 id_atualizar = ler_int("Qual o ID do usuário que deseja atualizar: ")
                 usuario = session.query(Usuario).filter_by(id=id_atualizar).first()
                 if validar_usuario(usuario):
                     usuario.nome = novo_nome
                     usuario.email = novo_email
-                    usuario.ativo = not usuario.ativo
+                    status = validar_sn("Deseja alterar o status? [S/N]: ")
+                    if status:
+                        usuario.ativo = not usuario.ativo
+                        print(f'Nome, Email e Status do usuário {usuario.id} alterados com sucesso.')
+                    else:
+                        print(f'Nome e Email do usuário {usuario.id} alterados com sucesso.')
                     session.commit()
-                    print(f'Nome, Email e Status do usuário {usuario.id} alterados com sucesso.')
                 else:
                     print("Usuário não encontrado.")
             case 2:
