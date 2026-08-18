@@ -21,3 +21,4 @@ def ler_int(msg):
                 continue
         except ValueError:
             print('Digite um número válido.')
+

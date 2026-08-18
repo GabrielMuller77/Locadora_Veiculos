@@ -106,8 +106,6 @@ def atualizar_cadastro():
                     else:
                         print(f'Nome e Email do usuário {usuario.id} alterados com sucesso.')
                     session.commit()
-                else:
-                    print("Usuário não encontrado.")
             case 2:
                 novo_nome = input("Novo nome: ")
                 id_atualizar = ler_int("Qual o ID do usuário que deseja atualizar: ")
@@ -116,8 +114,6 @@ def atualizar_cadastro():
                     usuario.nome = novo_nome
                     session.commit()
                     print(f'Nome do usuário {usuario.id} alterado com sucesso.')
-                else:
-                    print('Usuário não encontrado.')
             case 3:
                 novo_email = input("Novo email: ")
                 id_atualizar = ler_int("Qual o ID do usuário que deseja atualizar: ")
@@ -126,8 +122,6 @@ def atualizar_cadastro():
                     usuario.email = novo_email
                     session.commit()
                     print(f'Email do usuário {usuario.id} alterado com sucesso.')
-                else:
-                    print("Usuário não encontrado.")
             case 4:
                 id_atualizar = ler_int("Qual o ID do usuário que deseja atualizar: ")
                 usuario = session.query(Usuario).filter_by(id=id_atualizar).first()
@@ -135,8 +129,6 @@ def atualizar_cadastro():
                     usuario.ativo = not usuario.ativo
                     session.commit()
                     print(f'Status do usuário {usuario.id} alterado com sucesso.')
-                else:
-                    print("Usuário não encontrado.")
             case 5:
                 print("Encerrando programa de atualização.")
                 break
