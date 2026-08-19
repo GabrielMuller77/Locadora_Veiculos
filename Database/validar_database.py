@@ -1,3 +1,5 @@
+from utilidades import perguntar_novamente
+
 def validar_usuario(usuario):
     if usuario is None:
         print('Usuário não encontrado.')
@@ -22,3 +24,14 @@ def ler_int(msg):
         except ValueError:
             print('Digite um número válido.')
 
+
+def validar_placa(placa):
+    while True:
+        if len(placa) == 6:
+            return placa
+        else:
+            if perguntar_novamente():
+                continue
+            else:
+                print("Encerrando verificação de placa.")
+                break

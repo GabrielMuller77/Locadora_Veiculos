@@ -11,11 +11,11 @@ def validar_int(msg):
         except ValueError:
             print('Valor inválido')
 
-def validar_placa(msg, lista_veiculos):
+def validar_placa_duplicada(msg, lista_veiculos):
     while True:
         placa_escolhida = input(msg)
         duplicada = False
-        if len(placa_escolhida) < 6:
+        if len(placa_escolhida) == 6:
             print('A placa deve conter no mínimo 6 caracteres, tente novamente.')
             continue
         else:

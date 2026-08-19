@@ -1,6 +1,6 @@
 from database import session
-from modelos import Veiculo
-from validar_database import ler_int, validar_veiculo
+from modelos import Veiculo, Usuario
+from validar_database import ler_int, validar_veiculo, validar_placa, validar_usuario
 from utilidades import perguntar_novamente, validar_sn
 
 def cadastrar_veiculo(veiculo):
@@ -14,7 +14,6 @@ def buscar_veiculo():
         escolha = ler_int("Sua opção: ")
         match escolha:
             case 1:
-                print('oi')
                 listar_veiculo()
             case 2:
                 while True:
@@ -44,8 +43,8 @@ def buscar_veiculo():
                             break
             case 4:
                 while True:
-                    placa_veiculo = input("Placa do veículo: ")
-                    veiculo = session.query(Veiculo).filter_by(placa=placa_veiculo).first
+                    placa_veiculo = validar_placa("Placa do veículo: ")
+                    veiculo = session.query(Veiculo).filter_by(placa=placa_veiculo).first()
                     if validar_veiculo(veiculo):
                         lista_um(veiculo)
                         break
@@ -57,7 +56,7 @@ def buscar_veiculo():
                             break
             case 5:
                 while True:
-                    status_veiculo = ler_int("1 - Ativo\n2 - Inativo")
+                    status_veiculo = ler_int("1 - Alugado\n2 - Disponível")
                     if status_veiculo ==  1:
                         veiculo = session.query(Veiculo).filter_by(status=True).all()
                         for v in veiculo:
@@ -76,12 +75,23 @@ def buscar_veiculo():
                             break
             case 6:
                 while True:
-                    id_locatario = ler_int("ID do locatário: ")
-                    veiculo = session.query(Veiculo).filter_by(locatario=id_locatario).first()
-                    if perguntar_novamente():
-                        continue
-                    else:
-                        print("Encerrando busca por Locatário.")
+                  id_locatario = ler_int("ID do locatário: ")
+                  usuario = session.query(Usuario).filter_by(id=id_locatario).first()
+                  veiculos = session.query(Veiculo).filter_by(locatario=id_locatario).all()
+                  if validar_usuario(usuario):
+                      if veiculos:
+                          for veiculo in veiculos:
+                              lista_um(veiculo)
+                          break
+                      else:
+                          print("Esse locatário não possui veículos.")
+                  else:
+                      print("Locatário não encontrado.")
+                  if perguntar_novamente():
+                      continue
+                  else:
+                      print("Encerrando busca por Locatário.")
+                      break
             case 7:
                 print("Encerrando menu de busca...")
                 break
@@ -90,13 +100,13 @@ def buscar_veiculo():
 
 
 def lista_um(veiculo):
-    print(f"ID: {veiculo.id}\nMODELO: {veiculo.modelo}\nPLACA: {veiculo.placa}\nVALOR DIÁRIO: {veiculo.valor_diario}\nSTATUS: {'Alugado' if veiculo.status else 'Disponível'}\nID DO LOCATÁRIO: {veiculo.locatario if veiculo.status else 'Veículo Alugado'}")
+    print(f"ID: {veiculo.id}\nMODELO: {veiculo.modelo}\nPLACA: {veiculo.placa}\nVALOR DIÁRIO: {veiculo.valor_diario}\nSTATUS: {'Alugado' if veiculo.status else 'Disponível'}\nID DO LOCATÁRIO: {veiculo.locatario if veiculo.status else 'Nenhum'}")
 
 
 def listar_veiculo():
     veiculos = session.query(Veiculo).all()
     for veiculo in veiculos:
-        print(f"ID: {veiculo.id}\nMODELO: {veiculo.modelo}\nPLACA: {veiculo.placa}\nVALOR DIÁRIO: {veiculo.valor_diario}\nSTATUS: {'Alugado' if veiculo.status else 'Disponível'}\nID DO LOCATÁRIO: {veiculo.locatario if veiculo.status else 'Veículo Alugado'}")
+        print(f"ID: {veiculo.id}\nMODELO: {veiculo.modelo}\nPLACA: {veiculo.placa}\nVALOR DIÁRIO: {veiculo.valor_diario}\nSTATUS: {'Alugado' if veiculo.status else 'Disponível'}\nID DO LOCATÁRIO: {veiculo.locatario if veiculo.status else 'Nenhum'}")
 
 def excluir_veiculo():
     while True:
@@ -107,8 +117,8 @@ def excluir_veiculo():
             return
         veiculo = session.query(Veiculo).filter_by(id=id_exclusao).first()
         if validar_veiculo(veiculo):
-            verificador = validar_sn(f'Tem certeza que deseja excluir o usuario {id_exclusao}, [S/N]: ').upper().strip()
-            if verificador and verificador[0] == 'S':
+            verificador = validar_sn(f'Tem certeza que deseja excluir o veículo {id_exclusao}, [S/N]: ')
+            if verificador:
                 session.delete(veiculo)
                 session.commit()
                 print('Usuário excluído, encerrando sistema de exclusão.')
@@ -127,22 +137,30 @@ def atualizar_veiculo():
             case 1:
                 id_veiculo = ler_int("ID do veículo: ")
                 novo_modelo = input("Novo modelo: ")
-                nova_placa = input("Nova placa: ") #necessário inserir o validar placa.
+                nova_placa = validar_placa("Nova placa: ")
                 novo_valor = ler_int("Novo valor diário: ")
                 novo_locatario = ler_int("Novo locatário: ")
                 veiculo = session.query(Veiculo).filter_by(id=id_veiculo).first()
-                if validar_sn(veiculo):
-                    veiculo.modelo = novo_modelo
-                    veiculo.placa = nova_placa
-                    veiculo.valor_diario = novo_valor
-                    veiculo.locatario = novo_locatario
+                usuario = session.query(Usuario).filter_by(id=novo_locatario).first()
+                if validar_veiculo(veiculo):
                     status = validar_sn("Deseja alterar o status? [S/N]: ")
                     if status:
                         veiculo.status = not veiculo.status
-                        print("Modelo, Placa, Valor Diário, Locatário e Status alterados com sucesso.")
+                    if veiculo.status:
+                        if validar_usuario(usuario):
+                            veiculo.locatario = novo_locatario
+                        else:
+                            print("Locatário não encontrado.")
+                            continue
                     else:
-                        print("Modelo, Placa, Valor Diário e Locatário alterados com sucesso.")
+                        veiculo.locatario = None
+                    veiculo.modelo = novo_modelo
+                    veiculo.placa = nova_placa
+                    veiculo.valor_diario = novo_valor
                     session.commit()
+                    print("Veículo atualizado com sucesso.")
+                else:
+                    print("Veículo não encontrado.")
             case 2:
                 id_veiculo = ler_int("ID do veículo: ")
                 novo_modelo = input("Novo modelo: ")
@@ -152,7 +170,7 @@ def atualizar_veiculo():
                     session.commit()
             case 3:
                 id_veiculo = ler_int("ID do veículo: ")
-                nova_placa = input("Nova placa: ")
+                nova_placa = validar_placa("Nova placa: ")
                 veiculo = session.query(Veiculo).filter_by(id=id_veiculo).first()
                 if validar_veiculo(veiculo):
                     veiculo.placa = nova_placa
@@ -169,14 +187,20 @@ def atualizar_veiculo():
                 veiculo = session.query(Veiculo).filter_by(id=id_veiculo).first()
                 if validar_veiculo(veiculo):
                     veiculo.status = not veiculo.status
+                    if not veiculo.status:
+                        veiculo.locatario = None
                     session.commit()
             case 6:
                 id_veiculo = ler_int("ID do veículo: ")
                 novo_locatario = ler_int("ID do locatário: ")
                 veiculo = session.query(Veiculo).filter_by(id=id_veiculo).first()
-                if validar_veiculo(veiculo) and novo_locatario in Veiculo.locatario:
-                    veiculo.locatario = novo_locatario
-                    session.commit()
+                usuario = session.query(Usuario).filter_by(id=novo_locatario).first()
+                if validar_veiculo(veiculo) and validar_usuario(usuario):
+                    if veiculo.status:
+                        veiculo.locatario = novo_locatario
+                        session.commit()
+                    else:
+                        print("O veículo está disponível, altere o status para Alugado primeiro.")
             case 7:
                 print("Encerrando o sistema de atualização.")
                 break
