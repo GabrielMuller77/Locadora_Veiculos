@@ -139,21 +139,21 @@ def atualizar_veiculo():
                 novo_modelo = input("Novo modelo: ")
                 nova_placa = validar_placa("Nova placa: ")
                 novo_valor = ler_int("Novo valor diário: ")
-                novo_locatario = ler_int("Novo locatário: ")
                 veiculo = session.query(Veiculo).filter_by(id=id_veiculo).first()
-                usuario = session.query(Usuario).filter_by(id=novo_locatario).first()
                 if validar_veiculo(veiculo):
                     status = validar_sn("Deseja alterar o status? [S/N]: ")
                     if status:
                         veiculo.status = not veiculo.status
-                    if veiculo.status:
-                        if validar_usuario(usuario):
-                            veiculo.locatario = novo_locatario
+                        if veiculo.status:
+                            novo_locatario = ler_int("Novo locatário: ")
+                            usuario = session.query(Usuario).filter_by(id=novo_locatario).first()
+                            if validar_usuario(usuario):
+                                veiculo.locatario = novo_locatario
+                            else:
+                                print("Locatário não encontrado.")
+                                continue
                         else:
-                            print("Locatário não encontrado.")
-                            continue
-                    else:
-                        veiculo.locatario = None
+                            veiculo.locatario = None
                     veiculo.modelo = novo_modelo
                     veiculo.placa = nova_placa
                     veiculo.valor_diario = novo_valor

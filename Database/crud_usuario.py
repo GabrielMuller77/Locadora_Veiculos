@@ -40,7 +40,8 @@ def consultar_usuario():
                         if perguntar_novamente():
                             continue
                         else:
-                            print("Encerrando consulta por Email.")                
+                            print("Encerrando consulta por Email.")    
+                            break            
             case 4:
                 print("Saindo...")
                 break
